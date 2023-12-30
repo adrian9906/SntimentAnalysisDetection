@@ -1,22 +1,45 @@
+import json
 from IPython.display import display
+from sklearn.metrics import accuracy_score
 from tabulate import tabulate
+from ExtractPDFInfo.pdfExtractor import extractText
 from SentimentAlgorithm.nltk.sentimentAnalysis import nltkSentimentAnalysis
 from SentimentAlgorithm.textBlob.sentimentDetection import sentimentTextBlob
 
 
-tweets = [
- "dear @verizonsupport your service is straight shit in dallas.. been with y'all over a decade and this is all time low for y'all. i'm talking no internet at all.",
- "@verizonsupport I sent you a dm",
- "thanks to michelle et al at @verizonsupport who helped push my no-show-phone problem along. Order canceled successfully, and I ordered this for pickup today at the Apple store in the mall."
- ]
+def sentimenDetectMain(data):
+    dfTextBlob = sentimentTextBlob(data)
 
-df = sentimentTextBlob(tweets)
+    dfNLTK = nltkSentimentAnalysis(data)
+    
+    return dfNLTK, dfTextBlob
 
-df2 = nltkSentimentAnalysis(tweets)
+        
+        
+#PDF Extractor
+# texts = extractText('D:/apps/Proyectos Freelance/SntimentAnalysisDetection/dataset/Raven.pdf')
+# df, df2 = sentimenDetectMain(texts)
+
+# print(df)
+
+# print(df2)
+
+datatext = []
+with open ('D:/apps/Proyectos Freelance/SntimentAnalysisDetection/dataset/Sentiment_EN_WorldCup.json',mode='r') as file:
+    data = json.load(file)
+
+datatext = [x['tweet_text'] for x in data]
+dataLabel = [x['sentiment'].lower() for x in data]
+
+df, df2 = sentimenDetectMain(datatext)
+
+labelTextBlob = [x for x in df2['sentiment']]
+labelNLTK = [x for x in df['sentiment']]
 
 
-print(tabulate(df, headers="keys", tablefmt="pretty"))
+accuracy = accuracy_score(labelNLTK, dataLabel)
+accuracy2 = accuracy_score(labelTextBlob, dataLabel)    
 
-print('\n\n')
+print(accuracy)
 
-print(tabulate(df2, headers="keys", tablefmt="pretty"))
+print(accuracy2)

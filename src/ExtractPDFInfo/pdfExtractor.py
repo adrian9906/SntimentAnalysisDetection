@@ -7,6 +7,6 @@ def extractText(pdfPath):
     
     for page in doc:
         text = page.get_text()
-        textPdf+= text
+        textPdf+= text.split('\n')
     
     return textPdf

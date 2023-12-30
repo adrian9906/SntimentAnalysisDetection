@@ -10,14 +10,15 @@ def sentimentTextBlob(texts):
     sentimentList = []
     
     for text in texts:
-      blob = TextBlob(text)
-      sentiment = detectSentiment(blob.polarity)
-      dic = {
-          'text': text,
-          'sentiment': sentiment,
-          'emoji': emojiSent(sentiment) 
-      }
-      sentimentList.append(dic)
+        if text != '':
+            blob = TextBlob(text)
+            sentiment = detectSentiment(blob.polarity)
+            dic = {
+                'text': text,
+                'sentiment': sentiment,
+                'emoji': emojiSent(sentiment) 
+            }
+            sentimentList.append(dic)
       
     df = pd.DataFrame(sentimentList)
       

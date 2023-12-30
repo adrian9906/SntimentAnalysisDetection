@@ -9,14 +9,15 @@ def nltkSentimentAnalysis(texts):
     sia = SentimentIntensityAnalyzer()
     
     for text in texts:
-        scores = sia.polarity_scores(text)
-        sentiment = scores['compound']
-        dic = {
-          'text': text,
-          'sentiment':  detectSentiment(sentiment),
-          'emoji': emojiSent(detectSentiment(sentiment)) 
-      }
-        sentimentList.append(dic)
+        if text != '':
+            scores = sia.polarity_scores(text)
+            sentiment = scores['compound']
+            dic = {
+            'text': text,
+            'sentiment':  detectSentiment(sentiment),
+            'emoji': emojiSent(detectSentiment(sentiment)) 
+        }
+            sentimentList.append(dic)
     df = pd.DataFrame(sentimentList)
       
     return df
